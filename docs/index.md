@@ -160,23 +160,30 @@ cryogenic control of quantum processors"></textarea>
       </div>
     </fieldset>
 
+    <!-- ── How to run ── -->
+    <fieldset>
+      <legend>🚀 How to run</legend>
+      <p>
+        This page generates <strong>config files only</strong>. To actually run
+        the scout, use the built-in local web UI that ships with sqout:
+      </p>
+      <pre><code>cd ~/Documents/sqout
+sqout serve</code></pre>
+      <p>
+        Then open <strong>http://127.0.0.1:8765</strong> in your browser.
+        Same form, but clicking <em>Run</em> executes the pipeline directly on
+        your machine — no scripts, no GitHub API. Works with LM Studio, Ollama,
+        or any local LLM.
+      </p>
+      <p class="hint">
+        Already have config files? Skip the web UI and run <code>sqout run</code>
+        directly from your checkout.
+      </p>
+    </fieldset>
+
     <div class="button-bar">
       <button type="button" id="download-yaml">⬇ Download sqout.yaml</button>
       <button type="button" id="download-env">⬇ Download .env</button>
-      <button type="button" id="run-sqout">🚀 Download & Run</button>
-    </div>
-
-    <div id="run-status" class="run-status" style="display:none">
-      <p>
-        <strong>Move the downloaded <code>sqout-run.sh</code> into your sqout checkout
-        directory</strong>, then:
-      </p>
-      <pre><code>chmod +x sqout-run.sh && ./sqout-run.sh</code></pre>
-      <p class="hint">
-        The script auto-activates <code>.venv</code> if it exists and writes
-        <code>config/sqout.yaml</code> + <code>.env</code> before running
-        <code>sqout run</code>.
-      </p>
     </div>
 
   </form>
