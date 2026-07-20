@@ -20,6 +20,3 @@ defaults:
     values:
       layout: brief
 
-exclude:
-  - assets/main.js
-  - assets/style.css
