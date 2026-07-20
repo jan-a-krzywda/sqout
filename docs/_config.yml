@@ -1,0 +1,25 @@
+title: Sqout
+description: A daily arXiv scout that briefs you on the papers that matter.
+theme: minima
+plugins:
+  - jekyll-feed
+
+header_pages:
+  - index.md
+  - briefs.md
+
+collections:
+  briefs:
+    output: true
+    permalink: /briefs/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: briefs
+    values:
+      layout: brief
+
+exclude:
+  - assets/main.js
+  - assets/style.css
