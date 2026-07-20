@@ -168,13 +168,14 @@ cryogenic control of quantum processors"></textarea>
 
     <div id="run-status" class="run-status" style="display:none">
       <p>
-        <code>sqout.yaml</code> and <code>.env</code> are bundled inside the script.
-        Make it executable and run it:
+        <strong>Move the downloaded <code>sqout-run.sh</code> into your sqout checkout
+        directory</strong>, then:
       </p>
       <pre><code>chmod +x sqout-run.sh && ./sqout-run.sh</code></pre>
       <p class="hint">
-        Or if you already have config files in place, just run
-        <code>sqout run</code> from your checkout.
+        The script auto-activates <code>.venv</code> if it exists and writes
+        <code>config/sqout.yaml</code> + <code>.env</code> before running
+        <code>sqout run</code>.
       </p>
     </div>
 
