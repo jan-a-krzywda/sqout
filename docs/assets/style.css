@@ -178,6 +178,36 @@ textarea#topics:focus {
   background: #0b5ed7;
 }
 
+#run-sqout {
+  background: #6f42c1;
+  color: #fff;
+}
+#run-sqout:hover {
+  background: #5a32a3;
+}
+#run-sqout:disabled {
+  background: #a28ad4;
+  cursor: not-allowed;
+}
+
+/* ── Run status ────────────────────────────────────────────────── */
+.run-status {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+.run-status.info {
+  background: #cff4fc;
+  border: 1px solid #9eeaf9;
+  color: #055160;
+}
+.run-status.error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #842029;
+}
+
 #download-env {
   background: #198754;
   color: #fff;

@@ -1,0 +1,108 @@
+name: Run Sqout
+
+on:
+  workflow_dispatch:
+    inputs:
+      topics:
+        description: 'Topics (one per line)'
+        type: string
+        required: true
+      categories:
+        description: 'arXiv categories (comma-separated)'
+        type: string
+        default: 'cond-mat.mes-hall, quant-ph'
+      lookback_days:
+        description: 'Lookback (days)'
+        type: number
+        default: 1
+      max_results:
+        description: 'Max papers to scout'
+        type: number
+        default: 200
+      top_n:
+        description: 'Papers in the brief'
+        type: number
+        default: 5
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install sqout
+        run: pip install -e .
+
+      - name: Write sqout.yaml
+        run: |
+          mkdir -p config
+          cat > config/sqout.yaml << 'SQOUTEOF'
+          corpus:
+            source: ~/openspin-repos/SpinLib/scripts/.local/graph/works.json
+            stale_after_days: 30
+
+          scout:
+            categories:
+          SQOUTEOF
+          echo "${{ inputs.categories }}" | tr ',' '\n' | sed 's/^[[:space:]]*//' | sed 's/[[:space:]]*$//' | grep -v '^$' | while read cat; do
+            echo "    - $cat" >> config/sqout.yaml
+          done
+          cat >> config/sqout.yaml << SQOUTEOF
+            lookback_days: ${{ inputs.lookback_days }}
+            max_results: ${{ inputs.max_results }}
+
+          topics:
+          SQOUTEOF
+          echo "${{ inputs.topics }}" | while read topic; do
+            [ -n "$topic" ] && echo "  - \"$topic\"" >> config/sqout.yaml
+          done
+          cat >> config/sqout.yaml << SQOUTEOF
+
+          llm:
+            light:
+              provider: ${{ vars.SQOUT_LIGHT_PROVIDER || 'anthropic' }}
+              model: ${{ vars.SQOUT_LIGHT_MODEL || 'claude-haiku-4-5' }}
+              api_key_env: ${{ vars.SQOUT_LIGHT_KEY_ENV || 'ANTHROPIC_API_KEY' }}
+              base_url: ${{ vars.SQOUT_LIGHT_BASE_URL || 'null' }}
+            heavy:
+              provider: ${{ vars.SQOUT_HEAVY_PROVIDER || 'anthropic' }}
+              model: ${{ vars.SQOUT_HEAVY_MODEL || 'claude-opus-4-8' }}
+              api_key_env: ${{ vars.SQOUT_HEAVY_KEY_ENV || 'ANTHROPIC_API_KEY' }}
+              base_url: ${{ vars.SQOUT_HEAVY_BASE_URL || 'null' }}
+
+          ranking:
+            weights:
+              llm: 0.6
+              centrality: 0.3
+              scites: 0.1
+            top_n: ${{ inputs.top_n }}
+
+          connect:
+            enabled: true
+            openalex_mailto: j.a.krzywda@gmail.com
+          SQOUTEOF
+
+      - name: Run sqout
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          TOGETHER_API_KEY: ${{ secrets.TOGETHER_API_KEY }}
+          LM_STUDIO_API_KEY: ${{ secrets.LM_STUDIO_API_KEY }}
+        run: sqout run
+
+      - name: Commit and push brief
+        run: |
+          git config user.name "Sqout Bot"
+          git config user.email "sqout-bot@users.noreply.github.com"
+          if [ -d briefs ]; then
+            cp -r briefs/*.md docs/_briefs/ 2>/dev/null || true
+            git add docs/_briefs/
+            git diff --staged --quiet || git commit -m "brief: $(date +%Y-%m-%d) scout run"
+          fi
+          git push

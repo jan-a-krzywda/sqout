@@ -325,4 +325,64 @@
     var env = buildEnv(config);
     download(env, '.env');
   });
+
+  // ── Workflow dispatch ──────────────────────────────────────────────
+  var runBtn = byId('run-sqout');
+  var statusEl = byId('run-status');
+
+  function showStatus(msg, isError) {
+    statusEl.style.display = '';
+    statusEl.textContent = msg;
+    statusEl.className = 'run-status ' + (isError ? 'error' : 'info');
+  }
+
+  runBtn.addEventListener('click', function () {
+    var pat = byId('gh-pat').value.trim();
+    if (!pat) {
+      showStatus('Please enter a GitHub PAT with workflow scope.', true);
+      return;
+    }
+
+    var topics = byId('topics').value.trim();
+    if (!topics) {
+      showStatus('Please enter at least one topic.', true);
+      return;
+    }
+
+    runBtn.disabled = true;
+    showStatus('Dispatching workflow…', false);
+
+    var body = {
+      ref: 'main',
+      inputs: {
+        topics: topics,
+        categories: byId('categories').value.trim() || 'cond-mat.mes-hall, quant-ph',
+        lookback_days: String(parseInt(byId('lookback').value, 10) || 1),
+        max_results: String(parseInt(byId('max-results').value, 10) || 200),
+        top_n: String(parseInt(byId('top-n').value, 10) || 5),
+      },
+    };
+
+    fetch('https://api.github.com/repos/jan-a-krzywda/sqout/actions/workflows/sqout-run.yml/dispatches', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + pat,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    }).then(function (resp) {
+      if (resp.status === 204) {
+        showStatus('Workflow dispatched! Check the Actions tab, or refresh in ~2 min to see the brief.', false);
+      } else {
+        return resp.json().then(function (data) {
+          throw new Error(data.message || 'HTTP ' + resp.status);
+        });
+      }
+    }).catch(function (err) {
+      showStatus('Failed: ' + err.message, true);
+    }).finally(function () {
+      runBtn.disabled = false;
+    });
+  });
 })();

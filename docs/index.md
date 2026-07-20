@@ -160,10 +160,32 @@ cryogenic control of quantum processors"></textarea>
       </div>
     </fieldset>
 
+    <!-- ── GitHub Actions trigger ── -->
+    <fieldset>
+      <legend>🚀 Run scout</legend>
+      <p class="hint">
+        Dispatches a GitHub Actions workflow that runs sqout, commits the brief
+        back to the repo, and refreshes this page. Requires API keys stored as
+        <a href="https://github.com/jan-a-krzywda/sqout/settings/secrets/actions" target="_blank">GitHub Secrets</a>
+        and a
+        <a href="https://github.com/settings/tokens?type=beta" target="_blank">GitHub PAT</a>
+        with <code>workflow</code> scope.
+      </p>
+      <div class="role-grid">
+        <label>
+          GitHub PAT
+          <input type="password" id="gh-pat" placeholder="github_pat_...">
+        </label>
+      </div>
+    </fieldset>
+
     <div class="button-bar">
       <button type="button" id="download-yaml">⬇ Download sqout.yaml</button>
       <button type="button" id="download-env">⬇ Download .env</button>
+      <button type="button" id="run-sqout">🚀 Run Scout</button>
     </div>
+
+    <div id="run-status" class="run-status" style="display:none"></div>
 
   </form>
 </div>
