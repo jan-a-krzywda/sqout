@@ -1,0 +1,55 @@
+# Sqout configuration. No secrets here — API keys live in .env, looked up by
+# the `api_key_env` names below.
+
+corpus:
+  # Read ONLY by `sqout sync-corpus`. No pipeline stage touches this path;
+  # runs read the snapshot at .local/corpus/works.json instead.
+  source: ~/openspin-repos/SpinLib/scripts/.local/graph/works.json
+  stale_after_days: 30
+
+scout:
+  categories:
+    - cond-mat.mes-hall
+    - quant-ph
+  lookback_days: 1
+  max_results: 200
+
+# ---------------------------------------------------------------------------
+# USER: replace these examples with your real topics before the first run.
+# The filter stage gates every paper against this list, so it is the single
+# biggest lever on what the brief pitches. Be specific — "quantum computing"
+# will let everything through; "charge noise in Si/SiGe double dots" won't.
+# ---------------------------------------------------------------------------
+topics:
+  - "example: silicon spin qubits and exchange gates"
+  - "example: charge noise and decoherence in quantum dots"
+
+llm:
+  # Per-paper work: summarize + relevance filter. Runs once per scouted paper,
+  # so this is where cost accumulates.
+  light:
+    provider: anthropic
+    model: claude-haiku-4-5
+    api_key_env: ANTHROPIC_API_KEY
+    base_url: null
+
+  # The brief itself. Runs only for the top-N papers.
+  heavy:
+    provider: anthropic
+    model: claude-opus-4-8
+    api_key_env: ANTHROPIC_API_KEY
+    base_url: null
+
+ranking:
+  # Weights are renormalized per paper over whichever signals are present,
+  # so a missing scite count doesn't penalize a paper.
+  weights:
+    llm: 0.6
+    centrality: 0.3
+    scites: 0.1
+  top_n: 5
+
+connect:
+  enabled: true
+  # Sent to OpenAlex as the polite-pool contact.
+  openalex_mailto: j.a.krzywda@gmail.com
