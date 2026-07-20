@@ -33,14 +33,14 @@ permalink: /
             <option value="groq">Groq</option>
             <option value="together">Together</option>
             <option value="ollama">Ollama</option>
-            <option value="lm-studio">LM Studio</option>
+            <option value="lm-studio" selected>LM Studio</option>
             <option value="custom">Custom</option>
           </select>
         </label>
 
         <label>
           Model
-          <input type="text" id="light-model" data-role="light" placeholder="claude-haiku-4-5">
+          <input type="text" id="light-model" data-role="light" value="liquid/lfm2.5-1.2b">
         </label>
 
         <label class="base-url-label" id="light-base-url-label">
@@ -75,14 +75,14 @@ permalink: /
             <option value="groq">Groq</option>
             <option value="together">Together</option>
             <option value="ollama">Ollama</option>
-            <option value="lm-studio">LM Studio</option>
+            <option value="lm-studio" selected>LM Studio</option>
             <option value="custom">Custom</option>
           </select>
         </label>
 
         <label>
           Model
-          <input type="text" id="heavy-model" data-role="heavy" placeholder="claude-opus-4-8">
+          <input type="text" id="heavy-model" data-role="heavy" value="liquid/lfm2.5-1.2b">
         </label>
 
         <label class="base-url-label" id="heavy-base-url-label">
