@@ -43,6 +43,12 @@
       env_var: 'OLLAMA_API_KEY',
       model: 'llama3.2',
     },
+    'lm-studio': {
+      provider: 'openai',
+      base_url: 'http://127.0.0.1:1234/v1',
+      env_var: 'LM_STUDIO_API_KEY',
+      model: '',
+    },
     custom: {
       provider: 'openai',
       base_url: '',

@@ -33,6 +33,7 @@ permalink: /
             <option value="groq">Groq</option>
             <option value="together">Together</option>
             <option value="ollama">Ollama</option>
+            <option value="lm-studio">LM Studio</option>
             <option value="custom">Custom</option>
           </select>
         </label>
@@ -74,6 +75,7 @@ permalink: /
             <option value="groq">Groq</option>
             <option value="together">Together</option>
             <option value="ollama">Ollama</option>
+            <option value="lm-studio">LM Studio</option>
             <option value="custom">Custom</option>
           </select>
         </label>
