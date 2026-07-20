@@ -12,7 +12,7 @@ import sys
 from datetime import date
 
 from . import brief, config, connect, corpus, filter as filter_stage
-from . import rank, scout, store, summarize
+from . import rank, scout, serve, store, summarize
 
 log = logging.getLogger('sqout')
 
@@ -149,14 +149,34 @@ def build_parser() -> argparse.ArgumentParser:
     p_render.add_argument('--date', help='brief date, YYYY-MM-DD (default: today)')
     p_render.set_defaults(func=cmd_render)
 
+    p_serve = sub.add_parser(
+        'serve', help='start the local web UI at http://127.0.0.1:8765',
+        parents=[sub_flags],
+    )
+    p_serve.set_defaults(func=cmd_serve)
+
     return parser
+
+
+class _NoConfig:
+    """Sentinel passed to `serve` — it doesn't need a config at startup."""
+    pass
+
+
+def cmd_serve(args, cfg: config.Config | _NoConfig) -> int:
+    """Start the local web server (no config needed — form generates it)."""
+    serve.run_server()
+    return 0
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     _setup_logging(args.verbose)
     try:
-        cfg = config.load(args.config)
+        if args.command == 'serve':
+            cfg = _NoConfig()
+        else:
+            cfg = config.load(args.config)
         return args.func(args, cfg)
     except (config.ConfigError, corpus.CorpusError) as exc:
         print(f'error: {exc}', file=sys.stderr)
