@@ -102,10 +102,10 @@ def _build_html() -> str:
             </select>
           </label>
           <label>Model
-            <input type="text" id="light-model" placeholder="mistral-7b-instruct-v0.3">
+            <input type="text" id="light-model" value="liquid/lfm2.5-1.2b">
           </label>
           <label>Base URL
-            <input type="text" id="light-base-url" placeholder="http://127.0.0.1:1234/v1">
+            <input type="text" id="light-base-url" value="http://127.0.0.1:1234/v1">
           </label>
         </div>
       </fieldset>
@@ -126,10 +126,10 @@ def _build_html() -> str:
             </select>
           </label>
           <label>Model
-            <input type="text" id="heavy-model" placeholder="mistral-7b-instruct-v0.3">
+            <input type="text" id="heavy-model" value="liquid/lfm2.5-1.2b">
           </label>
           <label>Base URL
-            <input type="text" id="heavy-base-url" placeholder="http://127.0.0.1:1234/v1">
+            <input type="text" id="heavy-base-url" value="http://127.0.0.1:1234/v1">
           </label>
         </div>
       </fieldset>

@@ -47,7 +47,7 @@
       provider: 'openai',
       base_url: 'http://127.0.0.1:1234/v1',
       env_var: 'LM_STUDIO_API_KEY',
-      model: '',
+      model: 'liquid/lfm2.5-1.2b',
     },
     custom: {
       provider: 'openai',
@@ -65,6 +65,7 @@
     groq: 'deepseek-r1-distill-llama-70b',
     together: 'meta-llama/Llama-3.3-70B-Instruct-Turbo',
     ollama: 'llama3.2',
+    'lm-studio': 'liquid/lfm2.5-1.2b',
     custom: '',
   };
 
